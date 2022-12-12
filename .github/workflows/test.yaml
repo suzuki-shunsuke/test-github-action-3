@@ -1,0 +1,39 @@
+---
+name: test
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - run: "true"
+
+  tfmigrate-plan:
+    name: "tfmigrate-plan (${{matrix.target.target}})"
+    runs-on: ${{matrix.target.runs_on}}
+    needs: setup
+    # if services is empty, the build job is skipped
+    if: "false"
+    steps:
+      - run: "true"
+
+  terraform-plan:
+    name: "terraform-plan (${{matrix.target.target}})"
+    runs-on: ${{matrix.target.runs_on}}
+    needs: setup
+    # if services is empty, the build job is skipped
+    if: "false"
+    steps:
+      - run: "true"
+
+  # This job is used for branch protection rule
+  # Add this job to `Status checks that are required`
+  status-check:
+    runs-on: ubuntu-latest
+    needs: [terraform-plan, tfmigrate-plan, setup]
+    if: failure()
+    steps:
+      - run: exit 1
