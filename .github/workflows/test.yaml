@@ -7,11 +7,13 @@ permissions:
   contents: read
 jobs:
   setup:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - run: "true"
 
   tfmigrate-plan:
+    timeout-minutes: 30
     name: "tfmigrate-plan (${{matrix.target.target}})"
     runs-on: ${{matrix.target.runs_on}}
     needs: setup
@@ -21,6 +23,7 @@ jobs:
       - run: "true"
 
   terraform-plan:
+    timeout-minutes: 30
     name: "terraform-plan (${{matrix.target.target}})"
     runs-on: ${{matrix.target.runs_on}}
     needs: setup
@@ -32,6 +35,7 @@ jobs:
   # This job is used for branch protection rule
   # Add this job to `Status checks that are required`
   status-check:
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     needs: [terraform-plan, tfmigrate-plan, setup]
     if: failure()
